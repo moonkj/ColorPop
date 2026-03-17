@@ -21,5 +21,6 @@ import UIKit
 
     ImageProcessingChannel.register(with: rootVC.binaryMessenger)
     AISegmentationChannel.register(with: rootVC.binaryMessenger)
+    CameraChannel.register(with: rootVC.binaryMessenger, textureRegistry: rootVC)
   }
 }

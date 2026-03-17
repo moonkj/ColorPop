@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/editor/editor_screen.dart';
+import '../../features/camera/camera_screen.dart';
 import '../../models/edit_item.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -20,6 +21,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           final item = state.extra as EditItem?;
           return EditorScreen(item: item);
         },
+      ),
+      GoRoute(
+        path: '/camera',
+        builder: (context, state) => const CameraScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

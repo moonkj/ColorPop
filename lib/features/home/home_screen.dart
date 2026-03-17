@@ -263,18 +263,12 @@ class _BottomActionBar extends ConsumerWidget {
       ),
       child: Row(
         children: [
-          // 카메라 버튼
+          // 카메라 버튼 → 실시간 AI 카메라 화면으로 이동
           Expanded(
             child: _ActionButton(
               icon: Icons.camera_alt_outlined,
               label: AppStrings.camera,
-              onTap: () async {
-                final item =
-                    await ref.read(homeProvider.notifier).pickFromCamera();
-                if (item != null && context.mounted) {
-                  context.push('/editor', extra: item);
-                }
-              },
+              onTap: () => context.push('/camera'),
             ),
           ),
           const SizedBox(width: AppSizes.sm),

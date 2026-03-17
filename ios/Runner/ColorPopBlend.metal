@@ -252,6 +252,55 @@ kernel void bgBlurEffect(
     }
 }
 
+// ── 11. 그레이스케일 변환 (카메라 실시간용, BGRA 입출력) ──────────
+// BGRA 텍스처: .r=Blue, .g=Green, .b=Red 채널 순서
+kernel void makeGrayscale(
+    texture2d<float, access::read>  colorTex [[texture(0)]],
+    texture2d<float, access::write> grayTex  [[texture(1)]],
+    uint2 gid [[thread_position_in_grid]])
+{
+    if (gid.x >= grayTex.get_width() || gid.y >= grayTex.get_height()) return;
+    float4 c = colorTex.read(gid);
+    // BGRA 스와이즐: c.r=Blue, c.g=Green, c.b=Red → 실제 RGB 루미넌스
+    float lum = 0.0722f * c.r + 0.7152f * c.g + 0.2126f * c.b;
+    float boosted = clamp(lum * 1.1f + 0.03f, 0.0f, 1.0f);
+    grayTex.write(float4(boosted, boosted, boosted, 1.0f), gid);
+}
+
+// ── 12. 시간적 스무딩 (Temporal Smoothing, EMA α=0.3) ────────────
+// 이전 프레임 마스크와 현재 AI 마스크를 가중 평균하여 지터 방지
+kernel void temporalSmooth(
+    texture2d<float, access::read>  currentMask [[texture(0)]],
+    texture2d<float, access::read>  prevMask    [[texture(1)]],
+    texture2d<float, access::write> outMask     [[texture(2)]],
+    constant float &alpha                        [[buffer(0)]],
+    uint2 gid [[thread_position_in_grid]])
+{
+    if (gid.x >= outMask.get_width() || gid.y >= outMask.get_height()) return;
+    float curr = currentMask.read(gid).r;
+    float prev = prevMask.read(gid).r;
+    // α=0.3: 새 프레임 30% + 이전 프레임 70% → 부드러운 전환
+    outMask.write(float4(mix(prev, curr, alpha), 0.0f, 0.0f, 1.0f), gid);
+}
+
+// ── 13. 실시간 Color Splash 블렌드 (카메라 프리뷰용, BGRA I/O) ───
+// colorTex(BGRA) + grayTex(BGRA) + maskTex(R32F) → outTex(BGRA)
+kernel void realtimeColorSplash(
+    texture2d<float, access::read>  colorTex  [[texture(0)]],
+    texture2d<float, access::read>  grayTex   [[texture(1)]],
+    texture2d<float, access::read>  maskTex   [[texture(2)]],
+    texture2d<float, access::write> outTex    [[texture(3)]],
+    constant float &isInverse                  [[buffer(0)]],
+    uint2 gid [[thread_position_in_grid]])
+{
+    if (gid.x >= outTex.get_width() || gid.y >= outTex.get_height()) return;
+    float4 color = colorTex.read(gid);
+    float4 gray  = grayTex.read(gid);
+    float  mask  = maskTex.read(gid).r;
+    if (isInverse > 0.5f) mask = 1.0f - mask;
+    outTex.write(float4(mix(color, gray, mask).rgb, 1.0f), gid);
+}
+
 // ── 10. 필름 누아르 (흑백 영역 고대비 + 비네팅) ─────────────────
 kernel void filmNoirEffect(
     texture2d<float, access::read>  inTex   [[texture(0)]],

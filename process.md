@@ -1,8 +1,8 @@
 # ColorPop — 상세 구현 계획서
 
-> **버전**: 1.5.0
+> **버전**: 1.6.0
 > **작성일**: 2026-03-17
-> **최종 업데이트**: 2026-03-17 (Phase 1~5 구현 완료)
+> **최종 업데이트**: 2026-03-17 (Phase 6 카메라 모드 구현 완료)
 > **스택**: Flutter 3.41+ / Swift (iOS Native) / Metal / Core Image / CoreML
 
 ---
@@ -990,7 +990,7 @@ Week 3-4  : Phase 2 ✅ — 마스크 시스템, 브러시 엔진 (MVP)
 Week 5-6  : Phase 3 ✅ — AI 세그멘테이션 (핵심 차별화)
 Week 7    : Phase 4 ✅ — Selective Color
 Week 8-9  : Phase 5 ✅ — 이펙트 시스템 (바이럴 포인트)
-Week 10-11: Phase 6    — 카메라 모드 (실시간 AI)
+Week 10-11: Phase 6 ✅ — 카메라 모드 (실시간 AI)
 Week 12   : Phase 7    — Export, Loop 영상, 공유
 Week 13   : Phase 8    — 수익화, 완성도, TestFlight
 Week 14   : 버그 수정, 최적화, App Store 제출
@@ -1162,15 +1162,38 @@ Week 14   : 버그 수정, 최적화, App Store 제출
 
 ---
 
-### Phase 6 — 카메라 모드 ⬜ 미시작
+### Phase 6 — 카메라 모드 ✅ 완료 (2026-03-17)
 
-- [ ] AVFoundation 카메라 세션 (AVCaptureSession)
-- [ ] 실시간 AI 세그멘테이션 (15fps)
-- [ ] Temporal Smoothing Metal 셰이더 (EMA, 지터 방지, A-2)
-- [ ] Flutter Texture Widget 카메라 렌더링
-- [ ] 고해상도 캡처 후 편집기 진입
-- [ ] Depth-Aware Splash (LiDAR 기기, A-4)
-- [ ] 관련 테스트
+- [x] AVFoundation 카메라 세션 (AVCaptureSession, 30fps)
+  - `CameraEngine.swift`: 전면/후면 전환, 30fps 고정, BGRA 픽셀 포맷
+- [x] 실시간 AI 세그멘테이션 (15fps, 2프레임마다 1회)
+  - `Task.detached` 비동기 처리, NSLock 스레드 안전 마스크 전달
+- [x] Temporal Smoothing Metal 셰이더 (EMA α=0.3, 지터 방지, A-2)
+  - `temporalSmooth` Metal 커널 (ColorPopBlend.metal 추가)
+  - ping-pong 텍스처 구조 (rawMask → smooth → prev)
+- [x] Metal 추가 커널 2종
+  - `makeGrayscale`: BGRA 스와이즐 정확한 루미넌스 계산
+  - `realtimeColorSplash`: BGRA I/O 실시간 Color Splash 블렌드
+- [x] Flutter Texture Widget 카메라 렌더링
+  - `ColorPopCameraTexture` (FlutterTexture 프로토콜, NSLock 보호)
+  - `CameraChannel.swift`: `com.colorpop/camera` MethodChannel + FlutterTexture 등록
+  - Flutter: `Texture(textureId: id)` 풀스크린 렌더링
+- [x] 고해상도 캡처 후 편집기 진입
+  - `AVCapturePhotoOutput` → JPEG → 임시 파일 → EditorScreen 이동
+- [x] Depth-Aware Splash 기반 구조 (LiDAR 기기, A-4)
+  - `CameraEngine.hasLiDAR` 정적 감지 (iOS 15.4+ `builtInLiDARDepthCamera`)
+  - Flutter UI: LiDAR 있을 때만 활성 (없으면 30% 투명도로 비활성)
+- [x] 반전 모드 토글 (카메라 뷰에서 피사체↔배경 교환)
+- [x] AppDelegate 등록 (`CameraChannel.register(with:textureRegistry:)`)
+- [x] 홈 화면 카메라 버튼 → `/camera` 라우트 연결
+- [x] GoRouter `/camera` 라우트 추가
+- [x] `camera_service.dart` (Platform Channel 래퍼)
+- [x] `camera_provider.dart` (Riverpod 상태 관리)
+- [x] `camera_screen.dart` (풀스크린 카메라 UI)
+- [x] 카메라 문자열 상수 (AppStrings)
+- [x] 관련 테스트 17개 (CameraState copyWith, 상태 전이, enum, Provider 초기값)
+
+**생성/수정 파일**: 12개 | **테스트**: 103/103 ✅ | **Dart 분석**: 0 errors/warnings
 
 ---
 
@@ -1209,13 +1232,13 @@ Week 14   : 버그 수정, 최적화, App Store 제출
 | Phase 3 — AI 세그멘테이션 | ✅ 완료 | VNPersonSegmentation, ObjectDetection, SmartPalette, 객체칩/추천카드 | 15개 | 41/41 ✅ |
 | Phase 4 — 색상 선택 | ✅ 완료 | HSL Metal 셰이더, Tap-to-Color, Tolerance 슬라이더, 그라디언트 범위(B-6) | 10개 | 68/68 ✅ |
 | Phase 5 — 이펙트 | ✅ 완료 | Neon Glow, Chromatic, Film Grain, BG Blur, Film Noir, Inverse Mode | 11개 | 86/86 ✅ |
-| Phase 6 — 카메라 | ⬜ 미시작 | AVFoundation, 실시간 AI, Temporal Smoothing | — | — |
+| Phase 6 — 카메라 | ✅ 완료 | AVFoundation 30fps, 실시간 AI 15fps, Temporal Smoothing, FlutterTexture, LiDAR 감지 | 12개 | 103/103 ✅ |
 | Phase 7 — Export | ⬜ 미시작 | 고해상도 렌더링, Loop 영상, 공유 | — | — |
 | Phase 8 — 완성 | ⬜ 미시작 | RevenueCat, 온보딩, 햅틱, TestFlight | — | — |
 
-**전체 진행률**: 5 / 8 Phase 완료 (62.5%)
+**전체 진행률**: 6 / 8 Phase 완료 (75%)
 
 ---
 
-*process.md — ColorPop 상세 구현 계획서 v1.5.0*
-*작성: 2026-03-17 | 업데이트: 2026-03-17 (Phase 1~5 구현 완료 반영)*
+*process.md — ColorPop 상세 구현 계획서 v1.6.0*
+*작성: 2026-03-17 | 업데이트: 2026-03-17 (Phase 6 카메라 모드 구현 완료)*

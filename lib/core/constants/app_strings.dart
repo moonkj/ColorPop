@@ -48,6 +48,12 @@ class AppStrings {
   static const String effectIntensity = '강도';
   static const String effectInverseMode = '반전 모드';
 
+  // Phase 6: 카메라 모드
+  static const String cameraInitializing = '카메라 준비 중...';
+  static const String cameraError = '카메라를 사용할 수 없습니다\n권한을 확인해주세요';
+  static const String cameraDepthMode = 'LiDAR 깊이 모드';
+  static const String cameraDepthModeUnavailable = 'LiDAR 미지원 기기';
+
   // 오류
   static const String errorImageLoad = '이미지를 불러올 수 없습니다';
   static const String errorProcessing = '이미지 처리 중 오류가 발생했습니다';
