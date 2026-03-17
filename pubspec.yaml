@@ -1,0 +1,37 @@
+name: color_pop
+description: "ColorPop — Black & White World, Selected Colors Alive"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # 상태관리
+  flutter_riverpod: ^2.5.1
+
+  # 라우팅
+  go_router: ^14.2.7
+
+  # 이미지 선택
+  image_picker: ^1.1.2
+
+  # 로컬 저장 및 경로 유틸
+  shared_preferences: ^2.3.2
+  path_provider: ^2.1.3
+  path: ^1.9.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/icons/
