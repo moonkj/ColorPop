@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_sizes.dart';
 import '../../core/constants/app_strings.dart';
+import '../../core/router/app_router.dart';
 import '../../services/haptic_service.dart';
 
 /// 첫 실행 3단계 온보딩 화면
@@ -56,8 +57,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   Future<void> _finish() async {
     HapticService.success();
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('hasSeenOnboarding', true);
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('hasSeenOnboarding', true);
+    } catch (_) {
+      // SharedPreferences 실패 시에도 네비게이션은 진행
+    }
+    // 메모리 상태 즉시 갱신 → GoRouter redirect가 '/'를 허용하도록
+    onboardingStatus.markAsSeen();
     if (mounted) context.go('/');
   }
 

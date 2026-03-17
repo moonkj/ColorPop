@@ -1,8 +1,8 @@
 # ColorPop — 상세 구현 계획서
 
-> **버전**: 1.8.0
+> **버전**: 2.0.0
 > **작성일**: 2026-03-17
-> **최종 업데이트**: 2026-03-17 (RevenueCat 실제 SDK 활성화 완료)
+> **최종 업데이트**: 2026-03-17 (앱명 Glow 변경 + 실기기 릴리즈 빌드 안정화 완료)
 > **스택**: Flutter 3.41+ / Swift (iOS Native) / Metal / Core Image / CoreML
 
 ---
@@ -1286,5 +1286,63 @@ Week 14   : 버그 수정, 최적화, App Store 제출
 
 ---
 
-*process.md — ColorPop 상세 구현 계획서 v1.9.0*
-*작성: 2026-03-17 | 업데이트: 2026-03-17 (RevenueCat 실제 SDK 활성화 — API 키만 교체하면 스토어 연동 완료)*
+---
+
+## 20. 릴리즈 빌드 안정화 — 버그 수정 이력 (2026-03-17)
+
+> 실기기 릴리즈 빌드(`flutter run --release`) 테스트 중 발생한 버그 및 수정 사항
+
+### 앱 브랜딩 변경
+- 앱명: `ColorPop` → **`Glow`**
+- `CFBundleDisplayName` (Info.plist), `GlowApp` (app.dart), `AppStrings.appName` 모두 변경
+- `pubspec.yaml` description 업데이트
+
+### iOS 배포 타겟 상향
+- `platform :ios, '13.0'` → **`'15.0'`** (Podfile + Xcode project.pbxproj 3개 섹션)
+- 이유: `VNGeneratePersonSegmentationRequest.upperBodyOnly` 등 iOS 15+ API 사용
+
+### Swift 파일 Xcode 프로젝트 등록
+- `xcodeproj` gem으로 13개 Swift 파일 프로젝트에 추가
+- 기존: 파일 존재하나 Xcode가 인식 못 해 `Cannot find 'AISegmentationChannel' in scope` 컴파일 에러
+
+### LaunchScreen / Main.storyboard 배경색 수정
+- 기본값 흰색 → `#0A0A0F` (앱 배경색)으로 변경
+- 이유: Flutter 엔진 초기화 전 iOS 네이티브 뷰가 흰색으로 노출되던 문제
+
+### AppDelegate 채널 등록 방식 개선
+- **기존**: `windowScene.windows.first?.rootViewController as? FlutterViewController` — window 미준비 시 guard fail → 채널 미등록
+- **수정**: `engineBridge.applicationRegistrar.messenger()` / `.textures()` 직접 사용
+- 이유: `didInitializeImplicitFlutterEngine` 호출 시점에 window 계층이 준비되지 않을 수 있음
+
+### GoRouter 리다이렉트 루프 수정
+- **버그**: `!onboardingStatus.loaded` 상태에서 `/splash` → redirect `/splash` → redirect `/splash` ... → GoRouter redirectLimit(5) 초과 → `GoException` → 릴리즈 모드 흰 화면
+- **수정**: 이미 `/splash`이면 `null` 반환으로 루프 차단
+  ```dart
+  if (!onboardingStatus.loaded) {
+    return state.matchedLocation == '/splash' ? null : '/splash';
+  }
+  ```
+
+### SharedPreferences 초기화 시점 수정
+- **기존**: `main()` async → `runApp()` 전 `await SharedPreferences.getInstance()` — 릴리즈 모드 실기기에서 플랫폼 채널 미준비로 무한 대기
+- **수정**: `addPostFrameCallback`으로 첫 프레임 렌더링 완료 후 `onboardingStatus.load()` 호출
+
+### HapticService 예외 처리 수정
+- **기존**: `on PlatformException` — `MissingPluginException`은 `PlatformException` 아님 → 포착 실패
+- **수정**: `catch (_)` 로 변경 (모든 예외 포착)
+
+### 온보딩 "시작하기" 버튼 수정
+- **버그**: `_finish()`에서 `prefs.setBool` 디스크에 저장하지만 `onboardingStatus.hasSeen`은 여전히 `false` → GoRouter가 `/` → `/onboarding` 리다이렉트 → 버튼이 동작 안 하는 것처럼 보임
+- **수정**: `onboardingStatus.markAsSeen()` 추가 → 메모리 상태 즉시 갱신 + `notifyListeners()` → GoRouter가 `/` 허용
+- **추가**: `_finish()` 내 SharedPreferences try-catch 추가 (플러그인 미등록 시에도 네비게이션 진행)
+
+### RevenueCat SDK 활성화
+- `purchases_flutter: ^8.0.0` 추가 (`pubspec.yaml`)
+- `premium_provider.dart`: SharedPreferences mock → 실제 `Purchases.configure()` 교체
+- `PremiumNotifier._init()` 전체 try-catch 감싸기 (테스트/네트워크 실패 graceful 처리)
+- **TODO**: RevenueCat 대시보드 API Key 발급 후 `premium_provider.dart:25` `_rcApiKey` 교체
+
+---
+
+*process.md — Glow (구 ColorPop) 상세 구현 계획서 v2.0.0*
+*작성: 2026-03-17 | 업데이트: 2026-03-17 (앱명 Glow 변경 + 실기기 릴리즈 빌드 안정화 + RevenueCat SDK 활성화)*

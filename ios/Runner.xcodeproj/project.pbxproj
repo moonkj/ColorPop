@@ -7,21 +7,34 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02C677DF4BE43D7F2E57EE72 /* AISegmentationChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE29EFE1795FE354A491B9A /* AISegmentationChannel.swift */; };
 		049AF0A15428C92C038D130D /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A801D42FC58A86B0C769A3 /* Pods_Runner.framework */; };
+		09C302FEA820E597696DCE01 /* PersonSegmentationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED6F89EF9D43AF056E274FAE /* PersonSegmentationEngine.swift */; };
 		10C9FF47A67A56664B0F23E0 /* ColorPopImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F55D08597B595F9EB6F17F /* ColorPopImageProcessor.swift */; };
+		110DDE1D2EADA82B498EE226 /* LoopVideoGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C974E4478018F88F0A6BCD51 /* LoopVideoGenerator.swift */; };
+		135E26B4D2CF263CC283C7E3 /* ColorSelectEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C78F308A677B192DEF50C8 /* ColorSelectEngine.swift */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		17965262FAF2C59954F6D9CA /* ColorPopBlendRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1BFDA40C6BDB9438454EC1 /* ColorPopBlendRenderer.swift */; };
 		1C8017D4E75B4DDFB6379925 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 747344332C8823D46C9A0C79 /* Pods_RunnerTests.framework */; };
+		2256F3CE8170747A74795BC8 /* ExportEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6893C0C44788D264DF469844 /* ExportEngine.swift */; };
 		331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C807B294A618700263BE5 /* RunnerTests.swift */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		3E65D8D9058621C346330274 /* MaskEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2724568C8161155D95C8DEE7 /* MaskEngine.swift */; };
+		486B22D5E374D3EC9F632C81 /* ExportChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78644999E7410020411C25A /* ExportChannel.swift */; };
+		63FE6E166DE7446ECCAFF1E8 /* SoundEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745B9FEECCCE4ECDF4D388A2 /* SoundEngine.swift */; };
+		7261AA533EE6B1A10BCF8B5B /* CameraEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5812766F0AFFECA717C58305 /* CameraEngine.swift */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		771998B3C6CE55E0D0DF6A0C /* ColorPopBlend.metal in Sources */ = {isa = PBXBuildFile; fileRef = 660A0310611F4D983918B344 /* ColorPopBlend.metal */; };
 		7884E8682EC3CC0700C636F2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7884E8672EC3CC0400C636F2 /* SceneDelegate.swift */; };
+		8CF7F89FDEA0E6F53D6C349C /* ObjectDetectionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4021F321C2E0823164CECB68 /* ObjectDetectionEngine.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		9AE6B5D4A506DFB36B8376DF /* ImageProcessingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762CABC097CD52F4B06C4BC1 /* ImageProcessingChannel.swift */; };
+		9B6A471C1111FFB34B2D9B88 /* SmartPaletteEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B935B4161F8011D91FF2E2 /* SmartPaletteEngine.swift */; };
+		A539B9A9450CF7DD0EEC0050 /* EffectsEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35714D3E0D997B3ED3B545F7 /* EffectsEngine.swift */; };
+		BA1DFBE0BCBB91721ED726AC /* CameraChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33AA608DEFE474E3747D144F /* CameraChannel.swift */; };
+		BAE646A845FF2C7C624A03F8 /* SoundChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10FCB112676AA07AECD5D707 /* SoundChannel.swift */; };
 		CF36F7799CA79E0D0EC5793B /* BrushEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15CAA1D27C4A909B59329041 /* BrushEngine.swift */; };
 		EDA3D158C31B9EB2E391314E /* EditHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CFD0E00B2A4EE557376FE5 /* EditHistory.swift */; };
 /* End PBXBuildFile section */
@@ -50,18 +63,26 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		10FCB112676AA07AECD5D707 /* SoundChannel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SoundChannel.swift; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		15CAA1D27C4A909B59329041 /* BrushEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BrushEngine.swift; sourceTree = "<group>"; };
 		2724568C8161155D95C8DEE7 /* MaskEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MaskEngine.swift; sourceTree = "<group>"; };
 		331C807B294A618700263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
 		331C8081294A63A400263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		33AA608DEFE474E3747D144F /* CameraChannel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CameraChannel.swift; sourceTree = "<group>"; };
+		35714D3E0D997B3ED3B545F7 /* EffectsEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EffectsEngine.swift; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
+		4021F321C2E0823164CECB68 /* ObjectDetectionEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ObjectDetectionEngine.swift; sourceTree = "<group>"; };
 		5001643643BCF1520601751F /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 		53F17504ABEAF5B5B97103ED /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		5431B9FF04839DBE07B8E1B5 /* Pods-RunnerTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile.xcconfig"; sourceTree = "<group>"; };
+		5812766F0AFFECA717C58305 /* CameraEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CameraEngine.swift; sourceTree = "<group>"; };
 		5D1BFDA40C6BDB9438454EC1 /* ColorPopBlendRenderer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ColorPopBlendRenderer.swift; sourceTree = "<group>"; };
+		61C78F308A677B192DEF50C8 /* ColorSelectEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ColorSelectEngine.swift; sourceTree = "<group>"; };
 		660A0310611F4D983918B344 /* ColorPopBlend.metal */ = {isa = PBXFileReference; includeInIndex = 1; path = ColorPopBlend.metal; sourceTree = "<group>"; };
+		6893C0C44788D264DF469844 /* ExportEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ExportEngine.swift; sourceTree = "<group>"; };
+		745B9FEECCCE4ECDF4D388A2 /* SoundEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SoundEngine.swift; sourceTree = "<group>"; };
 		747344332C8823D46C9A0C79 /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -70,6 +91,7 @@
 		76A801D42FC58A86B0C769A3 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7884E8672EC3CC0400C636F2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
+		8DE29EFE1795FE354A491B9A /* AISegmentationChannel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AISegmentationChannel.swift; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
 		9740EEB31CF90195004384FC /* Generated.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Generated.xcconfig; path = Flutter/Generated.xcconfig; sourceTree = "<group>"; };
 		97C146EE1CF9000F007C117D /* Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Runner.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -78,8 +100,12 @@
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		99CFD0E00B2A4EE557376FE5 /* EditHistory.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EditHistory.swift; sourceTree = "<group>"; };
+		A78644999E7410020411C25A /* ExportChannel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ExportChannel.swift; sourceTree = "<group>"; };
 		BBC1FDD947EDB98693D6A328 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
+		C974E4478018F88F0A6BCD51 /* LoopVideoGenerator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LoopVideoGenerator.swift; sourceTree = "<group>"; };
 		E669CE1B0850EB30E673B3D2 /* Pods-RunnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug.xcconfig"; sourceTree = "<group>"; };
+		ED6F89EF9D43AF056E274FAE /* PersonSegmentationEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PersonSegmentationEngine.swift; sourceTree = "<group>"; };
+		F0B935B4161F8011D91FF2E2 /* SmartPaletteEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SmartPaletteEngine.swift; sourceTree = "<group>"; };
 		FE5EC2D4E4CF602B83017BA2 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -185,6 +211,19 @@
 				5D1BFDA40C6BDB9438454EC1 /* ColorPopBlendRenderer.swift */,
 				99CFD0E00B2A4EE557376FE5 /* EditHistory.swift */,
 				660A0310611F4D983918B344 /* ColorPopBlend.metal */,
+				8DE29EFE1795FE354A491B9A /* AISegmentationChannel.swift */,
+				33AA608DEFE474E3747D144F /* CameraChannel.swift */,
+				5812766F0AFFECA717C58305 /* CameraEngine.swift */,
+				61C78F308A677B192DEF50C8 /* ColorSelectEngine.swift */,
+				35714D3E0D997B3ED3B545F7 /* EffectsEngine.swift */,
+				A78644999E7410020411C25A /* ExportChannel.swift */,
+				6893C0C44788D264DF469844 /* ExportEngine.swift */,
+				C974E4478018F88F0A6BCD51 /* LoopVideoGenerator.swift */,
+				4021F321C2E0823164CECB68 /* ObjectDetectionEngine.swift */,
+				ED6F89EF9D43AF056E274FAE /* PersonSegmentationEngine.swift */,
+				F0B935B4161F8011D91FF2E2 /* SmartPaletteEngine.swift */,
+				10FCB112676AA07AECD5D707 /* SoundChannel.swift */,
+				745B9FEECCCE4ECDF4D388A2 /* SoundEngine.swift */,
 			);
 			path = Runner;
 			sourceTree = "<group>";
@@ -411,6 +450,19 @@
 				17965262FAF2C59954F6D9CA /* ColorPopBlendRenderer.swift in Sources */,
 				EDA3D158C31B9EB2E391314E /* EditHistory.swift in Sources */,
 				771998B3C6CE55E0D0DF6A0C /* ColorPopBlend.metal in Sources */,
+				02C677DF4BE43D7F2E57EE72 /* AISegmentationChannel.swift in Sources */,
+				BA1DFBE0BCBB91721ED726AC /* CameraChannel.swift in Sources */,
+				7261AA533EE6B1A10BCF8B5B /* CameraEngine.swift in Sources */,
+				135E26B4D2CF263CC283C7E3 /* ColorSelectEngine.swift in Sources */,
+				A539B9A9450CF7DD0EEC0050 /* EffectsEngine.swift in Sources */,
+				486B22D5E374D3EC9F632C81 /* ExportChannel.swift in Sources */,
+				2256F3CE8170747A74795BC8 /* ExportEngine.swift in Sources */,
+				110DDE1D2EADA82B498EE226 /* LoopVideoGenerator.swift in Sources */,
+				8CF7F89FDEA0E6F53D6C349C /* ObjectDetectionEngine.swift in Sources */,
+				09C302FEA820E597696DCE01 /* PersonSegmentationEngine.swift in Sources */,
+				9B6A471C1111FFB34B2D9B88 /* SmartPaletteEngine.swift in Sources */,
+				BAE646A845FF2C7C624A03F8 /* SoundChannel.swift in Sources */,
+				63FE6E166DE7446ECCAFF1E8 /* SoundEngine.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -487,7 +539,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -617,7 +669,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -668,7 +720,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;

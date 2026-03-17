@@ -11,7 +11,7 @@ class AISegmentationChannel {
     private static let device: MTLDevice = MTLCreateSystemDefaultDevice()!
     private static let personEngine = PersonSegmentationEngine()
     private static let objectEngine = ObjectDetectionEngine()
-    private static lazy var paletteEngine = SmartPaletteEngine(device: device)
+    private static let paletteEngine = SmartPaletteEngine(device: MTLCreateSystemDefaultDevice()!)
 
     // 분석 결과 캐시
     private static var cachedObjects: [DetectedObjectInfo] = []

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'app.dart';
+import 'core/router/app_router.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,4 +21,9 @@ void main() {
   ));
 
   runApp(const ProviderScope(child: GlowApp()));
+
+  // 첫 프레임 렌더링 완료 후 로드 → 플랫폼 채널이 완전히 준비된 시점
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    onboardingStatus.load();
+  });
 }

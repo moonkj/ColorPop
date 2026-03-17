@@ -13,16 +13,14 @@ import UIKit
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
 
-    // FlutterViewController를 통해 binaryMessenger 접근
-    guard
-      let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-      let rootVC = windowScene.windows.first?.rootViewController as? FlutterViewController
-    else { return }
+    // applicationRegistrar를 통해 messenger/textures 직접 접근 (window 준비 여부 무관)
+    let messenger = engineBridge.applicationRegistrar.messenger()
+    let textures = engineBridge.applicationRegistrar.textures()
 
-    ImageProcessingChannel.register(with: rootVC.binaryMessenger)
-    AISegmentationChannel.register(with: rootVC.binaryMessenger)
-    CameraChannel.register(with: rootVC.binaryMessenger, textureRegistry: rootVC)
-    ExportChannel.register(with: rootVC.binaryMessenger)
-    SoundChannel.register(with: rootVC.binaryMessenger)
+    ImageProcessingChannel.register(with: messenger)
+    AISegmentationChannel.register(with: messenger)
+    CameraChannel.register(with: messenger, textureRegistry: textures)
+    ExportChannel.register(with: messenger)
+    SoundChannel.register(with: messenger)
   }
 }

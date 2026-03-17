@@ -27,7 +27,7 @@ class HapticService {
   static Future<void> success() async {
     try {
       await _channel.invokeMethod('notifySuccess');
-    } on PlatformException {
+    } catch (_) {
       await HapticFeedback.mediumImpact();
     }
   }
@@ -36,7 +36,7 @@ class HapticService {
   static Future<void> error() async {
     try {
       await _channel.invokeMethod('notifyError');
-    } on PlatformException {
+    } catch (_) {
       await HapticFeedback.heavyImpact();
     }
   }
@@ -45,7 +45,7 @@ class HapticService {
   static Future<void> selectionChanged() async {
     try {
       await _channel.invokeMethod('selectionChanged');
-    } on PlatformException {
+    } catch (_) {
       await HapticFeedback.selectionClick();
     }
   }
