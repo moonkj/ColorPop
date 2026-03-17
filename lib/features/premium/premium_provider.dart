@@ -1,5 +1,6 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 
 // ── 프리미엄 기능 목록 ────────────────────────────────────────────
 enum PremiumFeature {
@@ -18,6 +19,14 @@ enum SubscriptionPlan {
   annual,   // $29.99/년
 }
 
+// ── RevenueCat 설정 ───────────────────────────────────────────────
+// App Store Connect에서 발급한 RevenueCat iOS API 키를 여기에 입력하세요
+// app.revenuecat.com → 프로젝트 → iOS → API Key (appl_XXXX...)
+const _rcApiKey = 'appl_YOUR_REVENUECAT_API_KEY';
+
+// RevenueCat 대시보드 Entitlements 탭에서 만든 entitlement identifier
+const _entitlementId = 'pro';
+
 // ── 상태 ─────────────────────────────────────────────────────────
 class PremiumState {
   final bool isProUser;
@@ -35,7 +44,6 @@ class PremiumState {
   /// 특정 기능이 잠겨 있는지 (Pro 전용 기능이고 미구독인 경우)
   bool isLocked(PremiumFeature feature) {
     if (isProUser) return false;
-    // 무료 티어에서도 사용 가능한 기능
     const freeFeatures = <PremiumFeature>{};
     return !freeFeatures.contains(feature);
   }
@@ -62,76 +70,111 @@ class PremiumNotifier extends StateNotifier<PremiumState> {
     _init();
   }
 
-  static const _keyIsProUser = 'is_pro_user';
-  static const _keyPlan = 'subscription_plan';
-
   Future<void> _init() async {
-    // TODO: RevenueCat 초기화
-    // await Purchases.configure(PurchasesConfiguration('YOUR_REVENUECAT_API_KEY'));
+    try {
+      await Purchases.setLogLevel(LogLevel.warn);
+      await Purchases.configure(PurchasesConfiguration(_rcApiKey));
 
-    final prefs = await SharedPreferences.getInstance();
-    final isPro  = prefs.getBool(_keyIsProUser) ?? false;
-    final planIdx = prefs.getInt(_keyPlan) ?? 0;
-    state = state.copyWith(
-      isProUser: isPro,
-      plan: SubscriptionPlan.values[planIdx.clamp(0, SubscriptionPlan.values.length - 1)],
-    );
+      // 구독 상태 실시간 감지 (앱 포그라운드 복귀, 구매 완료 등)
+      Purchases.addCustomerInfoUpdateListener((info) {
+        _applyCustomerInfo(info);
+      });
+
+      // 초기 구독 상태 로드
+      final info = await Purchases.getCustomerInfo();
+      _applyCustomerInfo(info);
+    } catch (_) {
+      // 플러그인 미등록(테스트 환경) 또는 네트워크 실패 시 무료 상태 유지
+    }
   }
+
+  void _applyCustomerInfo(CustomerInfo info) {
+    final isPro = info.entitlements.active.containsKey(_entitlementId);
+    state = state.copyWith(isProUser: isPro, plan: _planFrom(info));
+  }
+
+  SubscriptionPlan _planFrom(CustomerInfo info) {
+    if (!info.entitlements.active.containsKey(_entitlementId)) {
+      return SubscriptionPlan.free;
+    }
+    final productId =
+        info.entitlements.active[_entitlementId]?.productIdentifier ?? '';
+    return productId.contains('annual')
+        ? SubscriptionPlan.annual
+        : SubscriptionPlan.monthly;
+  }
+
+  // ── 구매 ────────────────────────────────────────────────────────
 
   /// Pro 구독 구매 (월간)
-  Future<void> purchaseMonthly() async {
-    state = state.copyWith(isLoading: true, clearError: true);
-    try {
-      // TODO: RevenueCat 구매
-      // final offerings = await Purchases.getOfferings();
-      // final package = offerings.current?.monthly;
-      // if (package != null) {
-      //   await Purchases.purchasePackage(package);
-      // }
-
-      // Mock: 구매 성공 시뮬레이션 (개발/테스트용)
-      await _setPro(true, SubscriptionPlan.monthly);
-    } catch (e) {
-      state = state.copyWith(isLoading: false, error: '구매에 실패했습니다: $e');
-    }
-  }
+  Future<void> purchaseMonthly() => _purchase(PackageType.monthly);
 
   /// Pro 구독 구매 (연간)
-  Future<void> purchaseAnnual() async {
+  Future<void> purchaseAnnual() => _purchase(PackageType.annual);
+
+  Future<void> _purchase(PackageType type) async {
     state = state.copyWith(isLoading: true, clearError: true);
     try {
-      // TODO: RevenueCat 연간 구독 구매
-      await _setPro(true, SubscriptionPlan.annual);
-    } catch (e) {
-      state = state.copyWith(isLoading: false, error: '구매에 실패했습니다: $e');
+      final offerings = await Purchases.getOfferings();
+      final pkg = offerings.current?.availablePackages
+          .where((p) => p.packageType == type)
+          .firstOrNull;
+
+      if (pkg == null) {
+        state = state.copyWith(isLoading: false, error: '상품을 찾을 수 없습니다');
+        return;
+      }
+
+      final info = await Purchases.purchasePackage(pkg);
+      _applyCustomerInfo(info);
+      state = state.copyWith(isLoading: false);
+    } on PlatformException catch (e) {
+      final code = PurchasesErrorHelper.getErrorCode(e);
+      if (code == PurchasesErrorCode.purchaseCancelledError) {
+        // 사용자가 직접 취소 — 에러 메시지 불필요
+        state = state.copyWith(isLoading: false);
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          error: _errorMessage(code),
+        );
+      }
     }
   }
 
-  /// 구독 복원
+  // ── 복원 ────────────────────────────────────────────────────────
+
   Future<void> restorePurchases() async {
     state = state.copyWith(isLoading: true, clearError: true);
     try {
-      // TODO: RevenueCat 복원
-      // final customerInfo = await Purchases.restorePurchases();
-      // final isPro = customerInfo.entitlements.active.containsKey('pro');
-
-      final prefs = await SharedPreferences.getInstance();
-      final isPro = prefs.getBool(_keyIsProUser) ?? false;
+      final info = await Purchases.restorePurchases();
+      _applyCustomerInfo(info);
+      final isPro = info.entitlements.active.containsKey(_entitlementId);
       state = state.copyWith(
         isLoading: false,
-        isProUser: isPro,
         error: isPro ? null : '복원할 구독이 없습니다',
       );
-    } catch (e) {
-      state = state.copyWith(isLoading: false, error: '복원에 실패했습니다: $e');
+    } on PlatformException catch (e) {
+      final code = PurchasesErrorHelper.getErrorCode(e);
+      state = state.copyWith(isLoading: false, error: _errorMessage(code));
     }
   }
 
-  Future<void> _setPro(bool isPro, SubscriptionPlan plan) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_keyIsProUser, isPro);
-    await prefs.setInt(_keyPlan, plan.index);
-    state = state.copyWith(isProUser: isPro, plan: plan, isLoading: false);
+  // ── 유틸 ─────────────────────────────────────────────────────────
+
+  String _errorMessage(PurchasesErrorCode code) {
+    switch (code) {
+      case PurchasesErrorCode.networkError:
+        return '네트워크 연결을 확인해주세요';
+      case PurchasesErrorCode.productNotAvailableForPurchaseError:
+        return '현재 구매할 수 없는 상품입니다';
+      case PurchasesErrorCode.purchaseNotAllowedError:
+        return '이 기기에서는 구매가 허용되지 않습니다';
+      case PurchasesErrorCode.receiptAlreadyInUseError:
+        return '이미 다른 계정에서 사용 중인 구독입니다';
+      default:
+        return '구매에 실패했습니다. 다시 시도해주세요';
+    }
   }
 
   void clearError() => state = state.copyWith(clearError: true);

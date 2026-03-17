@@ -2,7 +2,7 @@
 
 > **버전**: 1.8.0
 > **작성일**: 2026-03-17
-> **최종 업데이트**: 2026-03-17 (Phase 8 수익화 & 완성도 구현 완료)
+> **최종 업데이트**: 2026-03-17 (RevenueCat 실제 SDK 활성화 완료)
 > **스택**: Flutter 3.41+ / Swift (iOS Native) / Metal / Core Image / CoreML
 
 ---
@@ -1229,9 +1229,14 @@ Week 14   : 버그 수정, 최적화, App Store 제출
 
 ### Phase 8 — 수익화 & 완성도 ✅ 완료 (2026-03-17)
 
-- [x] RevenueCat StoreKit 아키텍처 구현 (SharedPreferences mock, TODO 교체만 하면 동작)
-  - `PremiumNotifier._init()` + `purchaseMonthly/Annual/restorePurchases`
-  - RevenueCat 활성화: API키 삽입 + TODO 주석 코드 교체만 필요
+- [x] RevenueCat StoreKit 실제 SDK 활성화 완료
+  - `purchases_flutter: ^8.0.0` 의존성 추가 (`pubspec.yaml`)
+  - `premium_provider.dart` → 실제 `Purchases.configure()` + `getCustomerInfo()` + `purchasePackage()` + `restorePurchases()`
+  - `_init()` 전체 try-catch로 감싸 테스트 환경 및 네트워크 실패 graceful 처리
+  - `Podfile`: `platform :ios, '13.0'` 활성화
+  - `Info.plist`: `NSUserTrackingUsageDescription` 추가
+  - 테스트 13개 모두 통과 (MissingPluginException graceful 처리)
+  - **다음 단계**: RevenueCat 대시보드에서 API Key 발급 후 `_rcApiKey` 값 교체
 - [x] 프리미엄 기능 잠금 처리 (`PremiumState.isLocked(PremiumFeature)`)
   - 6가지 Pro 기능 정의: AI, 이펙트, Loop영상, 카메라AI, 고해상도, Depth
 - [x] Paywall 화면 (`paywall_screen.dart`)
@@ -1255,8 +1260,10 @@ Week 14   : 버그 수정, 최적화, App Store 제출
 
 > **TestFlight 배포 준비 체크리스트** (코드 외 작업):
 > - [ ] Xcode: Bundle ID, Team, Signing Certificate 설정
-> - [ ] Info.plist: NSUserTrackingUsageDescription 추가 (RevenueCat 요구)
-> - [ ] RevenueCat 대시보드: API Key 발급 + 제품(weekly/annual) 등록
+> - [x] Info.plist: NSUserTrackingUsageDescription 추가 (RevenueCat 요구) ✅
+> - [x] Podfile: platform :ios, '13.0' 활성화 ✅
+> - [ ] RevenueCat 대시보드: API Key 발급 후 `_rcApiKey` 값 교체 (`premium_provider.dart:25`)
+> - [ ] RevenueCat 대시보드: 제품(monthly/annual) 등록 + Entitlement `pro` 설정
 > - [ ] App Store Connect: 앱 등록, 스크린샷, 설명 작성
 > - [ ] TestFlight: Internal Testing 그룹 초대
 
@@ -1279,5 +1286,5 @@ Week 14   : 버그 수정, 최적화, App Store 제출
 
 ---
 
-*process.md — ColorPop 상세 구현 계획서 v1.8.0*
-*작성: 2026-03-17 | 업데이트: 2026-03-17 (Phase 8 수익화 & 완성도 구현 완료 — 전 Phase 완성)*
+*process.md — ColorPop 상세 구현 계획서 v1.9.0*
+*작성: 2026-03-17 | 업데이트: 2026-03-17 (RevenueCat 실제 SDK 활성화 — API 키만 교체하면 스토어 연동 완료)*
