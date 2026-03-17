@@ -19,5 +19,5 @@ void main() {
     statusBarBrightness: Brightness.dark,
   ));
 
-  runApp(const ProviderScope(child: ColorPopApp()));
+  runApp(const ProviderScope(child: GlowApp()));
 }

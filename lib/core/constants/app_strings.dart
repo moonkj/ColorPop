@@ -1,7 +1,7 @@
 class AppStrings {
   AppStrings._();
 
-  static const String appName = 'ColorPop';
+  static const String appName = 'Glow';
   static const String tagline = 'Black & White World, Selected Colors Alive';
 
   // 홈
@@ -90,7 +90,7 @@ class AppStrings {
   static const String onboardingStart = '시작하기';
 
   // Phase 8: Paywall / Premium
-  static const String paywallTitle = 'ColorPop Pro';
+  static const String paywallTitle = 'Glow Pro';
   static const String paywallSubtitle = '모든 기능을 무제한으로';
   static const String paywallFeatureAi = 'AI 세그멘테이션 무제한';
   static const String paywallFeatureEffects = '모든 바이럴 이펙트';
@@ -105,7 +105,7 @@ class AppStrings {
   static const String paywallBestValue = 'BEST VALUE';
   static const String paywallRestore = '구독 복원';
   static const String paywallAlreadyPro = 'Pro 구독 중';
-  static const String paywallSuccessMessage = 'ColorPop Pro가 활성화되었습니다!';
+  static const String paywallSuccessMessage = 'Glow Pro가 활성화되었습니다!';
   static const String paywallLegal =
       '구독은 자동 갱신됩니다. 구독 관리 및 해지는 기기 설정의 App Store에서 가능합니다.';
   static const String proBadge = 'PRO';
