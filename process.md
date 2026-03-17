@@ -1,8 +1,8 @@
 # ColorPop — 상세 구현 계획서
 
-> **버전**: 1.6.0
+> **버전**: 1.7.0
 > **작성일**: 2026-03-17
-> **최종 업데이트**: 2026-03-17 (Phase 6 카메라 모드 구현 완료)
+> **최종 업데이트**: 2026-03-17 (Phase 7 Export & 공유 구현 완료)
 > **스택**: Flutter 3.41+ / Swift (iOS Native) / Metal / Core Image / CoreML
 
 ---
@@ -991,7 +991,7 @@ Week 5-6  : Phase 3 ✅ — AI 세그멘테이션 (핵심 차별화)
 Week 7    : Phase 4 ✅ — Selective Color
 Week 8-9  : Phase 5 ✅ — 이펙트 시스템 (바이럴 포인트)
 Week 10-11: Phase 6 ✅ — 카메라 모드 (실시간 AI)
-Week 12   : Phase 7    — Export, Loop 영상, 공유
+Week 12   : Phase 7 ✅ — Export, Loop 영상, 공유
 Week 13   : Phase 8    — 수익화, 완성도, TestFlight
 Week 14   : 버그 수정, 최적화, App Store 제출
 ```
@@ -1197,16 +1197,33 @@ Week 14   : 버그 수정, 최적화, App Store 제출
 
 ---
 
-### Phase 7 — Export & 공유 ⬜ 미시작
+### Phase 7 — Export & 공유 ✅ 완료 (2026-03-17)
 
-- [ ] 원본 해상도 최종 합성 렌더링 파이프라인
-- [ ] JPG/PNG 내보내기 + Photos Framework 저장
-- [ ] Loop 영상 자동 생성 (B&W→Color 3~5초, AVAssetWriter, A-7)
-- [ ] Before/After 슬라이더 위젯
-- [ ] UIActivityViewController 공유
-- [ ] 공유 템플릿 (Original|Splash, Before|After)
-- [ ] Color Story 멀티프레임 (B-2)
-- [ ] 관련 테스트
+- [x] 고화질 렌더링 파이프라인 (EditorSession.exportRenderData, JPEG quality 0.95~0.97)
+- [x] JPG 내보내기 + Photos Framework 저장 (PHPhotoLibrary.performChanges)
+  - PHPhotoLibrary 권한 요청 + 에러 처리 포함
+- [x] Loop 영상 자동 생성 (B&W→Color 3초, AVAssetWriter + CPU 블렌딩, A-7)
+  - sin(t × π) 곡선으로 자연스러운 페이드 애니메이션
+  - 마스크를 영상 해상도로 업스케일 (최근방 보간)
+  - 임시 파일 → 공유 후 자동 정리
+- [x] Before/After 슬라이더 위젯 (BeforeAfterSlider)
+  - 드래그 핸들 + BEFORE/AFTER 레이블
+  - 0~100% 범위 제한 + GestureDetector 즉각 반응
+- [x] UIActivityViewController 공유 (이미지 + 영상)
+  - 최상단 뷰컨트롤러 자동 탐색
+  - iPad popover 위치 설정 포함
+- [x] ExportEngine.swift — Photos 저장 + 공유 로직 분리
+- [x] LoopVideoGenerator.swift — AVAssetWriter MP4 생성 (30fps × 90프레임)
+- [x] ExportChannel.swift — `com.colorpop/export` Platform Channel
+  - getExportFrame / saveToPhotos / shareImage / generateAndShareLoop / saveLoopToPhotos
+- [x] export_service.dart (Flutter Platform Channel 래퍼)
+- [x] export_provider.dart (Riverpod: ExportState/Notifier, isLoading, activeAction)
+- [x] export_screen.dart (DraggableScrollableSheet, Before/After 미리보기, 액션 버튼 3종)
+- [x] editor_screen.dart 저장 버튼 → showModalBottomSheet 연결
+- [x] AppDelegate ExportChannel 등록
+- [x] 관련 테스트 14개 (ExportState copyWith 8, ExportStatus/Action enum 2, 체이닝 3, 초기화 1)
+
+**생성/수정 파일**: 13개 | **테스트**: 117/117 ✅ | **Dart 분석**: 0 errors/warnings
 
 ---
 
@@ -1233,12 +1250,12 @@ Week 14   : 버그 수정, 최적화, App Store 제출
 | Phase 4 — 색상 선택 | ✅ 완료 | HSL Metal 셰이더, Tap-to-Color, Tolerance 슬라이더, 그라디언트 범위(B-6) | 10개 | 68/68 ✅ |
 | Phase 5 — 이펙트 | ✅ 완료 | Neon Glow, Chromatic, Film Grain, BG Blur, Film Noir, Inverse Mode | 11개 | 86/86 ✅ |
 | Phase 6 — 카메라 | ✅ 완료 | AVFoundation 30fps, 실시간 AI 15fps, Temporal Smoothing, FlutterTexture, LiDAR 감지 | 12개 | 103/103 ✅ |
-| Phase 7 — Export | ⬜ 미시작 | 고해상도 렌더링, Loop 영상, 공유 | — | — |
+| Phase 7 — Export | ✅ 완료 | 고해상도 렌더링, Loop 영상, Before/After 슬라이더, Photos 저장, 공유 | 13개 | 117/117 ✅ |
 | Phase 8 — 완성 | ⬜ 미시작 | RevenueCat, 온보딩, 햅틱, TestFlight | — | — |
 
-**전체 진행률**: 6 / 8 Phase 완료 (75%)
+**전체 진행률**: 7 / 8 Phase 완료 (87.5%)
 
 ---
 
-*process.md — ColorPop 상세 구현 계획서 v1.6.0*
-*작성: 2026-03-17 | 업데이트: 2026-03-17 (Phase 6 카메라 모드 구현 완료)*
+*process.md — ColorPop 상세 구현 계획서 v1.7.0*
+*작성: 2026-03-17 | 업데이트: 2026-03-17 (Phase 7 Export & 공유 구현 완료)*

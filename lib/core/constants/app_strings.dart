@@ -59,6 +59,22 @@ class AppStrings {
   static const String errorProcessing = '이미지 처리 중 오류가 발생했습니다';
   static const String errorPermission = '사진 접근 권한이 필요합니다';
 
+  // Phase 7: Export
+  static const String exportTitle = '내보내기';
+  static const String exportRendering = '고화질 렌더링 중...';
+  static const String exportSavePhoto = '사진 저장';
+  static const String exportSavePhotoSub = '기기 사진함에 저장';
+  static const String exportShare = '공유하기';
+  static const String exportShareSub = 'Instagram, TikTok 등으로 공유';
+  static const String exportLoopTitle = 'Loop 영상';
+  static const String exportLoopDesc = 'B&W → Color → B&W 3초 루프 영상을 생성합니다\nInstagram Reels, TikTok에 최적화';
+  static const String exportLoopShare = '영상 공유';
+  static const String exportLoopSave = '영상 저장';
+  static const String exportSaveSuccess = '사진이 저장되었습니다';
+  static const String exportLoopSaveSuccess = 'Loop 영상이 저장되었습니다';
+  static const String exportLoopGenerating = 'Loop 영상 생성 중...';
+  static const String exportPermissionError = '사진 접근 권한이 필요합니다\n설정에서 권한을 허용해주세요';
+
   // 시간 표시
   static const String justNow = '방금 전';
   static const String minutesAgo = '분 전';

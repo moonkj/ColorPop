@@ -5,6 +5,7 @@ import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_sizes.dart';
 import '../../core/constants/app_strings.dart';
 import '../../models/edit_item.dart';
+import '../../features/export/export_screen.dart';
 import 'canvas/editor_canvas.dart';
 import 'toolbar/brush_toolbar.dart';
 import 'toolbar/ai_objects_toolbar.dart';
@@ -155,30 +156,38 @@ class _TopBar extends ConsumerWidget {
   }
 }
 
-class _SaveButton extends StatelessWidget {
+class _SaveButton extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isReady = ref.watch(
+      editorProvider.select((s) => s.status == EditorStatus.ready),
+    );
+
     return GestureDetector(
-      onTap: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('저장 기능은 Phase 7에서 구현됩니다'),
-            backgroundColor: AppColors.surface,
-            duration: Duration(seconds: 2),
+      onTap: isReady
+          ? () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (_) => const ExportScreen(),
+              );
+            }
+          : null,
+      child: Opacity(
+        opacity: isReady ? 1.0 : 0.4,
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+              horizontal: AppSizes.md, vertical: AppSizes.xs),
+          decoration: BoxDecoration(
+            gradient: AppColors.primaryGradient,
+            borderRadius: BorderRadius.circular(AppSizes.radiusFull),
           ),
-        );
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-            horizontal: AppSizes.md, vertical: AppSizes.xs),
-        decoration: BoxDecoration(
-          gradient: AppColors.primaryGradient,
-          borderRadius: BorderRadius.circular(AppSizes.radiusFull),
-        ),
-        child: const Text(
-          AppStrings.save,
-          style: TextStyle(
-              color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
+          child: const Text(
+            AppStrings.save,
+            style: TextStyle(
+                color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
+          ),
         ),
       ),
     );

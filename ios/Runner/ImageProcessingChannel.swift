@@ -510,6 +510,71 @@ class EditorSession {
         return renderWithCurrentEffects()
     }
 
+    // ── Phase 7: Export ──────────────────────────────────────────
+
+    /// 현재 상태를 지정 품질로 JPEG 렌더링하여 반환
+    func exportRenderData(quality: CGFloat = 0.95) -> Data? {
+        guard
+            let color = colorTexture,
+            let gray  = grayTexture,
+            let mask  = maskEngine.maskTexture
+        else { return nil }
+        return renderer.render(
+            colorTexture:    color,
+            grayTexture:     gray,
+            maskTexture:     mask,
+            effectType:      currentEffectType,
+            effectIntensity: currentEffectIntensity,
+            isInverse:       isInverseMode,
+            jpegQuality:     quality
+        )
+    }
+
+    /// 현재 마스크 Float32 배열과 크기를 반환한다 (Loop 영상 생성용)
+    func getMaskSnapshot() -> (data: [Float], width: Int, height: Int)? {
+        guard let mask = maskEngine.maskTexture else { return nil }
+        let w = mask.width
+        let h = mask.height
+        var floats = [Float](repeating: 0, count: w * h)
+        mask.getBytes(
+            &floats,
+            bytesPerRow: w * MemoryLayout<Float>.size,
+            from: MTLRegionMake2D(0, 0, w, h),
+            mipmapLevel: 0
+        )
+        return (floats, w, h)
+    }
+
+    /// B&W→Color→B&W 3초 루프 MP4를 생성하여 임시 파일 URL 반환
+    func generateLoopVideo() -> URL? {
+        guard
+            let colorImg = currentImage,
+            let maskSnap = getMaskSnapshot()
+        else { return nil }
+
+        // 흑백 이미지 생성 (Core Image)
+        guard let ciColor = CIImage(image: colorImg) else { return nil }
+        let filter = CIFilter(name: "CIColorControls")!
+        filter.setValue(ciColor, forKey: kCIInputImageKey)
+        filter.setValue(0.0, forKey: kCIInputSaturationKey)
+        filter.setValue(1.05, forKey: kCIInputBrightnessKey)
+        filter.setValue(1.1, forKey: kCIInputContrastKey)
+        guard
+            let grayCI  = filter.outputImage,
+            let grayCG  = ciContext.createCGImage(grayCI, from: grayCI.extent)
+        else { return nil }
+        let grayImg = UIImage(cgImage: grayCG)
+
+        let generator = LoopVideoGenerator(device: device, commandQueue: commandQueue)
+        return generator.generate(
+            colorImage: colorImg,
+            grayImage:  grayImg,
+            maskData:   maskSnap.data,
+            maskWidth:  maskSnap.width,
+            maskHeight: maskSnap.height
+        )
+    }
+
     // ─────────────────────────────────────────────────────────────
 
     private func restoreAndRender(_ snapshot: Data) -> Data? {
