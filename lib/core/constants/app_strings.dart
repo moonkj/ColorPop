@@ -75,6 +75,44 @@ class AppStrings {
   static const String exportLoopGenerating = 'Loop 영상 생성 중...';
   static const String exportPermissionError = '사진 접근 권한이 필요합니다\n설정에서 권한을 허용해주세요';
 
+  // Phase 8: 온보딩
+  static const String onboarding1Title = '사진을 선택하세요';
+  static const String onboarding1Subtitle =
+      '갤러리에서 사진을 불러오거나\n카메라로 직접 촬영하세요';
+  static const String onboarding2Title = 'AI가 자동으로 분리해요';
+  static const String onboarding2Subtitle =
+      '한 번의 탭으로 인물, 사물, 배경을\n자동으로 감지합니다\n브러시로 세밀하게 조정할 수도 있어요';
+  static const String onboarding3Title = 'SNS에 바로 공유하세요';
+  static const String onboarding3Subtitle =
+      'Instagram, TikTok에 최적화된\nLoop 영상을 자동으로 생성합니다\n"Black & White World, Selected Colors Alive"';
+  static const String onboardingSkip = '건너뛰기';
+  static const String onboardingNext = '다음';
+  static const String onboardingStart = '시작하기';
+
+  // Phase 8: Paywall / Premium
+  static const String paywallTitle = 'ColorPop Pro';
+  static const String paywallSubtitle = '모든 기능을 무제한으로';
+  static const String paywallFeatureAi = 'AI 세그멘테이션 무제한';
+  static const String paywallFeatureEffects = '모든 바이럴 이펙트';
+  static const String paywallFeatureLoop = 'Loop 영상 자동 생성';
+  static const String paywallFeatureCamera = '실시간 AI 카메라 모드';
+  static const String paywallFeatureHighRes = '원본 해상도 내보내기';
+  static const String paywallFeatureDepth = 'Depth-Aware Splash (LiDAR)';
+  static const String paywallAnnualLabel = '연간 구독';
+  static const String paywallAnnualPrice = '\$29.99/년';
+  static const String paywallMonthlyLabel = '월간 구독';
+  static const String paywallMonthlyPrice = '\$3.99/월';
+  static const String paywallBestValue = 'BEST VALUE';
+  static const String paywallRestore = '구독 복원';
+  static const String paywallAlreadyPro = 'Pro 구독 중';
+  static const String paywallSuccessMessage = 'ColorPop Pro가 활성화되었습니다!';
+  static const String paywallLegal =
+      '구독은 자동 갱신됩니다. 구독 관리 및 해지는 기기 설정의 App Store에서 가능합니다.';
+  static const String proBadge = 'PRO';
+  static const String proRequired = 'Pro 기능';
+  static const String proRequiredMessage = '이 기능은 Pro 플랜에서만 사용할 수 있습니다';
+  static const String upgradeNow = 'Pro로 업그레이드';
+
   // 시간 표시
   static const String justNow = '방금 전';
   static const String minutesAgo = '분 전';

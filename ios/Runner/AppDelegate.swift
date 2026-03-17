@@ -23,5 +23,6 @@ import UIKit
     AISegmentationChannel.register(with: rootVC.binaryMessenger)
     CameraChannel.register(with: rootVC.binaryMessenger, textureRegistry: rootVC)
     ExportChannel.register(with: rootVC.binaryMessenger)
+    SoundChannel.register(with: rootVC.binaryMessenger)
   }
 }

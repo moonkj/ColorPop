@@ -5,7 +5,10 @@ import 'package:go_router/go_router.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_sizes.dart';
 import '../../core/constants/app_strings.dart';
+import '../../features/premium/paywall_screen.dart';
+import '../../features/premium/premium_provider.dart';
 import '../../models/edit_item.dart';
+import '../../services/haptic_service.dart';
 import 'home_provider.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -62,12 +65,7 @@ class _TopBar extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          IconButton(
-            icon: const Icon(Icons.settings_outlined, color: AppColors.textSecondary),
-            onPressed: () {
-              // Phase 8에서 설정 화면 구현
-            },
-          ),
+          _ProBadgeButton(),
         ],
       ),
     );
@@ -120,8 +118,14 @@ class _PhotoCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onTap: () => context.push('/editor', extra: item),
-      onLongPress: () => _showDeleteDialog(context, ref),
+      onTap: () {
+        HapticService.light();
+        context.push('/editor', extra: item);
+      },
+      onLongPress: () {
+        HapticService.medium();
+        _showDeleteDialog(context, ref);
+      },
       child: Stack(
         fit: StackFit.expand,
         children: [
@@ -268,7 +272,10 @@ class _BottomActionBar extends ConsumerWidget {
             child: _ActionButton(
               icon: Icons.camera_alt_outlined,
               label: AppStrings.camera,
-              onTap: () => context.push('/camera'),
+              onTap: () {
+                HapticService.light();
+                context.push('/camera');
+              },
             ),
           ),
           const SizedBox(width: AppSizes.sm),
@@ -280,6 +287,7 @@ class _BottomActionBar extends ConsumerWidget {
               label: AppStrings.gallery,
               isPrimary: true,
               onTap: () async {
+                HapticService.medium();
                 final item =
                     await ref.read(homeProvider.notifier).pickFromGallery();
                 if (item != null && context.mounted) {
@@ -289,6 +297,55 @@ class _BottomActionBar extends ConsumerWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// ── Pro 배지 버튼 (상단 우측) ────────────────────────────────────
+class _ProBadgeButton extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isPro = ref.watch(premiumProvider.select((s) => s.isProUser));
+
+    return GestureDetector(
+      onTap: () {
+        HapticService.light();
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (_) => const PaywallScreen(),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(right: AppSizes.sm),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: BoxDecoration(
+          gradient: isPro ? AppColors.primaryGradient : null,
+          color: isPro ? null : AppColors.card,
+          borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+          border: isPro ? null : Border.all(color: AppColors.divider),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              isPro ? Icons.verified : Icons.lock_outline,
+              size: 14,
+              color: isPro ? Colors.white : AppColors.textSecondary,
+            ),
+            const SizedBox(width: 4),
+            Text(
+              isPro ? AppStrings.proBadge : AppStrings.upgradeNow,
+              style: TextStyle(
+                color: isPro ? Colors.white : AppColors.textSecondary,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -5,6 +5,8 @@ import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_sizes.dart';
 import '../../core/constants/app_strings.dart';
 import '../../features/editor/editor_provider.dart';
+import '../../services/haptic_service.dart';
+import '../../services/sound_service.dart';
 import '../../widgets/before_after_slider.dart';
 import 'export_provider.dart';
 
@@ -33,10 +35,14 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     // 성공/에러 메시지 스낵바 표시
     ref.listen<ExportState>(exportProvider, (prev, next) {
       if (next.successMessage != null && prev?.successMessage != next.successMessage) {
+        HapticService.success();
+        SoundService.saveSuccess();
         _showSnackBar(next.successMessage!, isError: false);
         ref.read(exportProvider.notifier).clearMessages();
       }
       if (next.error != null && prev?.error != next.error) {
+        HapticService.error();
+        SoundService.errorSound();
         _showSnackBar(next.error!, isError: true);
         ref.read(exportProvider.notifier).clearMessages();
       }

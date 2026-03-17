@@ -10,6 +10,8 @@ import '../../models/color_selection.dart';
 import '../../models/effect_config.dart';
 import '../../services/image_processing_service.dart';
 import '../../services/ai_segmentation_service.dart';
+import '../../services/haptic_service.dart';
+import '../../services/sound_service.dart';
 
 enum EditorMode { brush, colorSelect, aiObject, effects }
 enum EditorStatus { idle, loading, ready, error }
@@ -189,6 +191,7 @@ class EditorNotifier extends StateNotifier<EditorState> {
   Future<void> endStroke() async {
     await _imageService.endStroke();
     state = state.copyWith(canUndo: true, canRedo: false);
+    HapticService.light();
   }
 
   Future<void> undo() async {
@@ -222,6 +225,8 @@ class EditorNotifier extends StateNotifier<EditorState> {
       aiSuggestions: result.suggestions,
       error: null,
     );
+    HapticService.success();
+    SoundService.aiComplete();
   }
 
   Future<void> applyObjectMask(DetectedObject object) async {
@@ -271,6 +276,8 @@ class EditorNotifier extends StateNotifier<EditorState> {
     required double normalizedY,
   }) async {
     if (state.status != EditorStatus.ready || state.isColorApplying) return;
+    HapticService.selection();
+    SoundService.colorSelect();
 
     final sampled = await _imageService.samplePixelColor(
       normalizedX: normalizedX,
